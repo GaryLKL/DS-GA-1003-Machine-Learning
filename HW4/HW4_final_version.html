@@ -13247,6 +13247,7 @@ $$w^{(k)} = (\alpha_iy_ix_i)^{(k-1)} + (\alpha_iy_ix_i)^{(k-2)} + (\alpha_iy_ix_
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">load</span> <span class="k">import</span> <span class="n">read_data</span><span class="p">,</span> <span class="n">folder_list</span>
 </pre></div>
 
     </div>
@@ -13259,56 +13260,7 @@ $$w^{(k)} = (\alpha_iy_ix_i)^{(k-1)} + (\alpha_iy_ix_i)^{(k-2)} + (\alpha_iy_ix_
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Read each file into a list of strings.</span>
-<span class="sd">    Example:</span>
-<span class="sd">    [&quot;it&#39;s&quot;, &#39;a&#39;, &#39;curious&#39;, &#39;thing&#39;, &quot;i&#39;ve&quot;, &#39;found&#39;, &#39;that&#39;, &#39;when&#39;, &#39;willis&#39;, &#39;is&#39;, &#39;not&#39;, &#39;called&#39;, &#39;on&#39;,</span>
-<span class="sd">    ...&#39;to&#39;, &#39;carry&#39;, &#39;the&#39;, &#39;whole&#39;, &#39;movie&#39;, &quot;he&#39;s&quot;, &#39;much&#39;, &#39;better&#39;, &#39;and&#39;, &#39;so&#39;, &#39;is&#39;, &#39;the&#39;, &#39;movie&#39;]</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-    <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="c1"># already split by space; sentence -&gt; word</span>
-    <span class="n">symbols</span> <span class="o">=</span> <span class="s1">&#39;$</span><span class="si">{}</span><span class="s1">()[].,:;+-*/&amp;|&lt;&gt;=~&quot; &#39;</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">Element</span><span class="p">:</span> <span class="n">Element</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">symbols</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">lines</span><span class="p">)</span> <span class="c1"># maketrans: If three arguments are passed, each character in the third argument is mapped to None</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span> <span class="c1"># if an element is None, it will be filtered out.</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">folder_list</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="n">label</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    PARAMETER PATH IS THE PATH OF YOUR LOCAL FOLDER</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">filelist</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="n">review</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">infile</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
-        <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="n">infile</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="n">review</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="c1"># review is a list of lists</span>
-    <span class="k">return</span> <span class="n">review</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">shuffle_data</span><span class="p">():</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">shuffle_data_with_seed</span><span class="p">():</span>
     <span class="n">pos_path</span> <span class="o">=</span> <span class="s2">&quot;data/pos&quot;</span>
     <span class="n">neg_path</span> <span class="o">=</span> <span class="s2">&quot;data/neg&quot;</span>
 
@@ -13329,10 +13281,10 @@ $$w^{(k)} = (\alpha_iy_ix_i)^{(k-1)} + (\alpha_iy_ix_i)^{(k-2)} + (\alpha_iy_ix_
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">shuffled</span> <span class="o">=</span> <span class="n">shuffle_data</span><span class="p">()</span> <span class="c1"># read and shuffle</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">shuffled</span> <span class="o">=</span> <span class="n">shuffle_data_with_seed</span><span class="p">()</span> <span class="c1"># read and shuffle</span>
 <span class="n">train</span> <span class="o">=</span> <span class="n">shuffled</span><span class="p">[:</span><span class="mi">1500</span><span class="p">]</span>
 <span class="n">val</span> <span class="o">=</span> <span class="n">shuffled</span><span class="p">[</span><span class="mi">1500</span><span class="p">:]</span>
 </pre></div>
@@ -13351,7 +13303,7 @@ $$w^{(k)} = (\alpha_iy_ix_i)^{(k-1)} + (\alpha_iy_ix_i)^{(k-2)} + (\alpha_iy_ix_
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
@@ -13364,7 +13316,7 @@ $$w^{(k)} = (\alpha_iy_ix_i)^{(k-1)} + (\alpha_iy_ix_i)^{(k-2)} + (\alpha_iy_ix_
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">SparseBOW</span><span class="p">(</span><span class="n">word_list</span><span class="p">):</span>
@@ -13378,7 +13330,7 @@ $$w^{(k)} = (\alpha_iy_ix_i)^{(k-1)} + (\alpha_iy_ix_i)^{(k-2)} + (\alpha_iy_ix_
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">train</span><span class="p">]</span>
@@ -13394,7 +13346,7 @@ $$w^{(k)} = (\alpha_iy_ix_i)^{(k-1)} + (\alpha_iy_ix_i)^{(k-2)} + (\alpha_iy_ix_
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train_dict</span> <span class="o">=</span> <span class="p">[</span><span class="n">SparseBOW</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">]</span>
@@ -13452,7 +13404,7 @@ w^{(k+1)}=w^{(k)}-\eta_t\lambda w^{(k)}=w^{(k)}(1-\eta_t\lambda)&amp; else \\
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
@@ -13467,7 +13419,7 @@ w^{(k+1)}=w^{(k)}-\eta_t\lambda w^{(k)}=w^{(k)}(1-\eta_t\lambda)&amp; else \\
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">svm_pegasus</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lambda_reg</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_epoch</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
@@ -13515,7 +13467,7 @@ w^{(k+1)}=w^{(k)}-\eta_t\lambda w^{(k)}=w^{(k)}(1-\eta_t\lambda)&amp; else \\
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">svm_pegasus_faster</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lambda_reg</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_epoch</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
@@ -13553,7 +13505,7 @@ w^{(k+1)}=w^{(k)}-\eta_t\lambda w^{(k)}=w^{(k)}(1-\eta_t\lambda)&amp; else \\
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">time</span>
@@ -13566,7 +13518,7 @@ w^{(k+1)}=w^{(k)}-\eta_t\lambda w^{(k)}=w^{(k)}(1-\eta_t\lambda)&amp; else \\
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_pegasus</span> <span class="o">=</span> <span class="n">svm_pegasus</span><span class="p">(</span><span class="n">X_train_dict</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
@@ -13590,13 +13542,13 @@ w^{(k+1)}=w^{(k)}-\eta_t\lambda w^{(k)}=w^{(k)}(1-\eta_t\lambda)&amp; else \\
 
  
  
-<div id="6f9b1193-417e-4989-99de-6ce2276b58e4"></div>
+<div id="edcd949a-5c6d-4f81-9a3a-dcbed405bd3d"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#6f9b1193-417e-4989-99de-6ce2276b58e4');
+var element = $('#edcd949a-5c6d-4f81-9a3a-dcbed405bd3d');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "2ebe4b23b27046a2bd28f2b7e9414828", "version_major": 2, "version_minor": 0}
+{"model_id": "9dcf058ca0f34a66a20691e5bc0cb933", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -13619,7 +13571,7 @@ var element = $('#6f9b1193-417e-4989-99de-6ce2276b58e4');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_pegasus_faster</span> <span class="o">=</span> <span class="n">svm_pegasus_faster</span><span class="p">(</span><span class="n">X_train_dict</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
@@ -13643,13 +13595,13 @@ var element = $('#6f9b1193-417e-4989-99de-6ce2276b58e4');
 
  
  
-<div id="db2e5779-1b3d-4fc2-bbb7-fd5418cdea12"></div>
+<div id="cbc30159-0ea1-4eee-b17f-d1e508d907ee"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#db2e5779-1b3d-4fc2-bbb7-fd5418cdea12');
+var element = $('#cbc30159-0ea1-4eee-b17f-d1e508d907ee');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "7d586245a4314adaa8c6fe94c72ad78c", "version_major": 2, "version_minor": 0}
+{"model_id": "c52cb0e76d6d4dc09c5a8ca24e069ecd", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -13672,7 +13624,7 @@ var element = $('#db2e5779-1b3d-4fc2-bbb7-fd5418cdea12');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">train_pegasus_faster</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">10</span><span class="p">])</span>
@@ -13712,7 +13664,7 @@ var element = $('#db2e5779-1b3d-4fc2-bbb7-fd5418cdea12');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">lossfunction</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -13741,7 +13693,7 @@ var element = $('#db2e5779-1b3d-4fc2-bbb7-fd5418cdea12');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">reg_tuning</span><span class="p">(</span><span class="n">reg_list</span><span class="p">,</span> <span class="n">train_X</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">val_X</span><span class="p">,</span> <span class="n">val_y</span><span class="p">):</span>
@@ -13759,7 +13711,7 @@ var element = $('#db2e5779-1b3d-4fc2-bbb7-fd5418cdea12');
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># reg = np.logspace(-3, 3, 7)</span>
@@ -13790,13 +13742,13 @@ var element = $('#db2e5779-1b3d-4fc2-bbb7-fd5418cdea12');
 
  
  
-<div id="46de476a-1930-4aca-af2a-706615e734df"></div>
+<div id="7a19fec1-b061-4590-a0ef-ed0684d09796"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#46de476a-1930-4aca-af2a-706615e734df');
+var element = $('#7a19fec1-b061-4590-a0ef-ed0684d09796');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "6438845d601e455393bcc710256211d9", "version_major": 2, "version_minor": 0}
+{"model_id": "7a38b1782733415097f8712fbbf83323", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -13823,13 +13775,13 @@ var element = $('#46de476a-1930-4aca-af2a-706615e734df');
 
  
  
-<div id="d057bd58-8bea-474a-94ae-bf84592cc9a1"></div>
+<div id="946881b3-27a6-49bb-9d02-25b466967411"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#d057bd58-8bea-474a-94ae-bf84592cc9a1');
+var element = $('#946881b3-27a6-49bb-9d02-25b466967411');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "bf1f8e879f8242f68a5aa0a764a5c005", "version_major": 2, "version_minor": 0}
+{"model_id": "cb67d8699d11487fa5069e3ff49ed86b", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -13856,13 +13808,13 @@ var element = $('#d057bd58-8bea-474a-94ae-bf84592cc9a1');
 
  
  
-<div id="97b872f1-ea6b-420f-b8e7-e8670a4249af"></div>
+<div id="13f1ed25-87d2-4b7b-8fef-5451ec0c79da"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#97b872f1-ea6b-420f-b8e7-e8670a4249af');
+var element = $('#13f1ed25-87d2-4b7b-8fef-5451ec0c79da');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "f8114fafa39f492982a5582b7a04435c", "version_major": 2, "version_minor": 0}
+{"model_id": "cedea973fb0a4bb79e28350aff7447e4", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -13889,13 +13841,13 @@ var element = $('#97b872f1-ea6b-420f-b8e7-e8670a4249af');
 
  
  
-<div id="eba3fc95-5790-46d2-b179-24ca8b1fc886"></div>
+<div id="25626075-fac2-4443-a940-b1b29865f35e"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#eba3fc95-5790-46d2-b179-24ca8b1fc886');
+var element = $('#25626075-fac2-4443-a940-b1b29865f35e');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "eba84c1ea80947a5a4be999bebd3d8b7", "version_major": 2, "version_minor": 0}
+{"model_id": "abecb876b1fe4e6d863291cb6d8fc5ea", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -13922,13 +13874,13 @@ var element = $('#eba3fc95-5790-46d2-b179-24ca8b1fc886');
 
  
  
-<div id="dae49ebc-2787-4c97-9173-166b677793b6"></div>
+<div id="3910e27f-e8a0-4ac4-8330-d9b215f828b5"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#dae49ebc-2787-4c97-9173-166b677793b6');
+var element = $('#3910e27f-e8a0-4ac4-8330-d9b215f828b5');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "ded14f3e7c0c4e83b4de38a15ee1c512", "version_major": 2, "version_minor": 0}
+{"model_id": "f10050fae71a43c781a989a567b613a0", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -13955,13 +13907,13 @@ var element = $('#dae49ebc-2787-4c97-9173-166b677793b6');
 
  
  
-<div id="26db7903-937e-4d1c-8475-2c731e87a28e"></div>
+<div id="27bc5954-c536-4427-a6c8-d53d7d4fa516"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#26db7903-937e-4d1c-8475-2c731e87a28e');
+var element = $('#27bc5954-c536-4427-a6c8-d53d7d4fa516');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "35fab35ac8b64d50a16e4100468b16e2", "version_major": 2, "version_minor": 0}
+{"model_id": "0317e52953e64935853f8ebbc3567435", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -13988,13 +13940,13 @@ var element = $('#26db7903-937e-4d1c-8475-2c731e87a28e');
 
  
  
-<div id="8841a00e-c4f8-4b51-9036-269f798d402f"></div>
+<div id="f1f55273-4653-4b83-88c7-d60037e8add9"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#8841a00e-c4f8-4b51-9036-269f798d402f');
+var element = $('#f1f55273-4653-4b83-88c7-d60037e8add9');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "152a8ea3312f47309e7c5c7e7b6bad43", "version_major": 2, "version_minor": 0}
+{"model_id": "1f08a9b213534defa9aaf89e57a1d2f8", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
